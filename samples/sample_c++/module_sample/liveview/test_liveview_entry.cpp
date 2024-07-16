@@ -186,7 +186,7 @@ void DjiUser_RunCameraStreamViewSample()
 static void DjiUser_ShowRgbImageCallback(CameraRGBImage img, void *userData)
 {
     string name = string(reinterpret_cast<char *>(userData));
-
+    USER_LOG_ERROR("Haan!!!! Varudhu varudhu");
 #ifdef OPEN_CV_INSTALLED
     Mat mat(img.height, img.width, CV_8UC3, img.rawData.data(), img.width * 3);
 

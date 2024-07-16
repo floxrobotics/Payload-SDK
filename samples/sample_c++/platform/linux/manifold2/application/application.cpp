@@ -317,19 +317,19 @@ void Application::DjiUser_ApplicationStart()
         }
 #endif
 
-#ifdef CONFIG_MODULE_SAMPLE_WIDGET_ON
-        returnCode = DjiTest_WidgetStartService();
-        if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
-            USER_LOG_ERROR("widget sample init error");
-        }
-#endif
+// #ifdef CONFIG_MODULE_SAMPLE_WIDGET_ON
+//        returnCode = DjiTest_WidgetStartService();
+//        if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
+//            USER_LOG_ERROR("widget sample init error");
+//        }
+// #endif
 
-#ifdef CONFIG_MODULE_SAMPLE_WIDGET_SPEAKER_ON
-        returnCode = DjiTest_WidgetSpeakerStartService();
-        if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
-            USER_LOG_ERROR("widget speaker test init error");
-        }
-#endif
+// #ifdef CONFIG_MODULE_SAMPLE_WIDGET_SPEAKER_ON
+//        returnCode = DjiTest_WidgetSpeakerStartService();
+//        if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
+//            USER_LOG_ERROR("widget speaker test init error");
+//        }
+// #endif
 
 #ifdef CONFIG_MODULE_SAMPLE_POWER_MANAGEMENT_ON
     T_DjiTestApplyHighPowerHandler applyHighPowerHandler = {

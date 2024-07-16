@@ -24,13 +24,13 @@
       "usb_device_vid": "0x0B95",
       "usb_device_pid": "0x1790",
       "usb_bulk1_device_name": "/dev/usb-ffs/bulk1",
-      "usb_bulk1_interface_num": "2",
-      "usb_bulk1_endpoint_in": "0x83",
-      "usb_bulk1_endpoint_out": "0x02",
+      "usb_bulk1_interface_num": "7",
+      "usb_bulk1_endpoint_in": "0x88",
+      "usb_bulk1_endpoint_out": "0x05",
       "usb_bulk2_device_name": "/dev/usb-ffs/bulk2",
-      "usb_bulk2_interface_num": "3",
-      "usb_bulk2_endpoint_in": "0x84",
-      "usb_bulk2_endpoint_out": "0x03"
+      "usb_bulk2_interface_num": "8",
+      "usb_bulk2_endpoint_in": "0x89",
+      "usb_bulk2_endpoint_out": "0x06"
     }
   }
 }

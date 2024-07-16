@@ -23,7 +23,8 @@
  */
 
 /* Includes ------------------------------------------------------------------*/
-#include <liveview/test_liveview_entry.hpp>
+// #include <liveview/test_liveview_entry.hpp>
+#include <liveview/test_liveview.h>
 #include <perception/test_perception_entry.hpp>
 #include <flight_control/test_flight_control.h>
 #include <gimbal/test_gimbal_entry.hpp>
@@ -58,6 +59,7 @@ int main(int argc, char **argv)
     T_DjiOsalHandler *osalHandler = DjiPlatform_GetOsalHandler();
     T_DjiReturnCode returnCode;
     T_DjiTestApplyHighPowerHandler applyHighPowerHandler;
+    static E_DjiMountPosition s_mountPosition = DJI_MOUNT_POSITION_PAYLOAD_PORT_NO1;
 
 start:
     std::cout
@@ -88,7 +90,7 @@ start:
             DjiUser_RunGimbalManagerSample();
             break;
         case 'c':
-            DjiUser_RunCameraStreamViewSample();
+            DjiTest_LiveviewRunSample(s_mountPosition);
             break;
         case 'd':
             DjiUser_RunStereoVisionViewSample();

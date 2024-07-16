@@ -24,6 +24,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "test_liveview.hpp"
+#include <dji_logger.h>
 
 /* Private constants ---------------------------------------------------------*/
 
@@ -87,12 +88,12 @@ T_DjiReturnCode LiveviewSample::StartFpvCameraStream(CameraImageCallback callbac
 T_DjiReturnCode LiveviewSample::StartMainCameraStream(CameraImageCallback callback, void *userData)
 {
     auto deocder = streamDecoder.find(DJI_LIVEVIEW_CAMERA_POSITION_NO_1);
-
+    USER_LOG_ERROR("Payload 1 da ambi");
     if ((deocder != streamDecoder.end()) && deocder->second) {
         deocder->second->init();
         deocder->second->registerCallback(callback, userData);
-
-        return DjiLiveview_StartH264Stream(DJI_LIVEVIEW_CAMERA_POSITION_NO_1, DJI_LIVEVIEW_CAMERA_SOURCE_DEFAULT,
+        USER_LOG_ERROR("Callback ah register pannitom");
+        return DjiLiveview_StartH264Stream(DJI_LIVEVIEW_CAMERA_POSITION_NO_1, DJI_LIVEVIEW_CAMERA_SOURCE_M30T_WIDE,
                                            LiveviewConvertH264ToRgbCallback);
     } else {
         return DJI_ERROR_SYSTEM_MODULE_CODE_NOT_FOUND;
@@ -107,7 +108,7 @@ T_DjiReturnCode LiveviewSample::StartViceCameraStream(CameraImageCallback callba
         deocder->second->init();
         deocder->second->registerCallback(callback, userData);
 
-        return DjiLiveview_StartH264Stream(DJI_LIVEVIEW_CAMERA_POSITION_NO_2, DJI_LIVEVIEW_CAMERA_SOURCE_DEFAULT,
+        return DjiLiveview_StartH264Stream(DJI_LIVEVIEW_CAMERA_POSITION_NO_1, DJI_LIVEVIEW_CAMERA_SOURCE_M30T_IR,
                                            LiveviewConvertH264ToRgbCallback);
     } else {
         return DJI_ERROR_SYSTEM_MODULE_CODE_NOT_FOUND;
@@ -122,7 +123,7 @@ T_DjiReturnCode LiveviewSample::StartTopCameraStream(CameraImageCallback callbac
         deocder->second->init();
         deocder->second->registerCallback(callback, userData);
 
-        return DjiLiveview_StartH264Stream(DJI_LIVEVIEW_CAMERA_POSITION_NO_3, DJI_LIVEVIEW_CAMERA_SOURCE_DEFAULT,
+        return DjiLiveview_StartH264Stream(DJI_LIVEVIEW_CAMERA_POSITION_NO_1, DJI_LIVEVIEW_CAMERA_SOURCE_M30T_ZOOM,
                                            LiveviewConvertH264ToRgbCallback);
     } else {
         return DJI_ERROR_SYSTEM_MODULE_CODE_NOT_FOUND;
@@ -201,7 +202,9 @@ T_DjiReturnCode LiveviewSample::StopTopCameraStream()
 static void LiveviewConvertH264ToRgbCallback(E_DjiLiveViewCameraPosition position, const uint8_t *buf, uint32_t bufLen)
 {
     auto deocder = streamDecoder.find(position);
+    USER_LOG_ERROR("Position ah kandupudikuran pola!");
     if ((deocder != streamDecoder.end()) && deocder->second) {
+        USER_LOG_ERROR("Edho decoding aam");
         deocder->second->decodeBuffer(buf, bufLen);
     }
 }

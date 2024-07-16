@@ -156,7 +156,7 @@ T_DjiReturnCode DjiTest_LiveviewRunSample(E_DjiMountPosition mountPosition)
                 localTime->tm_hour, localTime->tm_min, localTime->tm_sec);
 
         returnCode = DjiLiveview_StartH264Stream((E_DjiLiveViewCameraPosition) mountPosition,
-                                                 DJI_LIVEVIEW_CAMERA_SOURCE_M3T_IR,
+                                                 DJI_LIVEVIEW_CAMERA_SOURCE_M3TD_VIS,
                                                  DjiTest_PayloadCameraStreamCallback);
         if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
             USER_LOG_ERROR("Request h264 of payload %d failed, error code: 0x%08X", mountPosition, returnCode);
@@ -168,7 +168,7 @@ T_DjiReturnCode DjiTest_LiveviewRunSample(E_DjiMountPosition mountPosition)
         }
 
         returnCode = DjiLiveview_StopH264Stream((E_DjiLiveViewCameraPosition) mountPosition,
-                                                DJI_LIVEVIEW_CAMERA_SOURCE_M3T_IR);
+                                                DJI_LIVEVIEW_CAMERA_SOURCE_M3TD_VIS);
         if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
             USER_LOG_ERROR("Request to stop h264 of payload %d failed, error code: 0x%08X", mountPosition, returnCode);
             goto out;
@@ -196,6 +196,8 @@ out:
 static void DjiTest_FpvCameraStreamCallback(E_DjiLiveViewCameraPosition position, const uint8_t *buf,
                                             uint32_t bufLen)
 {
+
+    USER_LOG_INFO("FPV Stream CB");
     FILE *fp = NULL;
     size_t size;
 
@@ -218,6 +220,7 @@ static void DjiTest_FpvCameraStreamCallback(E_DjiLiveViewCameraPosition position
 static void DjiTest_PayloadCameraStreamCallback(E_DjiLiveViewCameraPosition position, const uint8_t *buf,
                                                 uint32_t bufLen)
 {
+    USER_LOG_INFO("Payload Stream CB");
     FILE *fp = NULL;
     size_t size;
 

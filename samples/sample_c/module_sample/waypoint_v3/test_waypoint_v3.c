@@ -130,12 +130,12 @@ T_DjiReturnCode DjiTest_WaypointV3RunSample(void)
     }
 #endif
 
-    USER_LOG_INFO("Execute start action");
-    returnCode = DjiWaypointV3_Action(DJI_WAYPOINT_V3_ACTION_START);
-    if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
-        USER_LOG_ERROR("Execute start action failed.");
-        goto close_file;
-    }
+    // USER_LOG_INFO("Execute start action");
+    // returnCode = DjiWaypointV3_Action(DJI_WAYPOINT_V3_ACTION_START);
+    // if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
+    //     USER_LOG_ERROR("Execute start action failed.");
+    //     goto close_file;
+    // }
 
 close_file:
 #ifdef SYSTEM_ARCH_LINUX
@@ -154,33 +154,33 @@ close_file:
         goto out;
     }
 
-    USER_LOG_INFO("The aircraft is on the ground and motors are stoped...");
-    returnCode = DjiTest_WaypointV3WaitEndFlightStatus(DJI_FC_SUBSCRIPTION_FLIGHT_STATUS_STOPED);
-    if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
-        USER_LOG_ERROR("Wait end flight status error.");
-        goto out;
-    }
+    // USER_LOG_INFO("The aircraft is on the ground and motors are stoped...");
+    // returnCode = DjiTest_WaypointV3WaitEndFlightStatus(DJI_FC_SUBSCRIPTION_FLIGHT_STATUS_STOPED);
+    // if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
+    //     USER_LOG_ERROR("Wait end flight status error.");
+    //     goto out;
+    // }
 
-    USER_LOG_INFO("The aircraft is on the ground and motors are rotating...");
-    returnCode = DjiTest_WaypointV3WaitEndFlightStatus(DJI_FC_SUBSCRIPTION_FLIGHT_STATUS_ON_GROUND);
-    if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
-        USER_LOG_ERROR("Wait end flight status error.");
-        goto out;
-    }
+    // USER_LOG_INFO("The aircraft is on the ground and motors are rotating...");
+    // returnCode = DjiTest_WaypointV3WaitEndFlightStatus(DJI_FC_SUBSCRIPTION_FLIGHT_STATUS_ON_GROUND);
+    // if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
+    //     USER_LOG_ERROR("Wait end flight status error.");
+    //     goto out;
+    // }
 
-    USER_LOG_INFO("The aircraft is in the air...");
-    returnCode = DjiTest_WaypointV3WaitEndFlightStatus(DJI_FC_SUBSCRIPTION_FLIGHT_STATUS_IN_AIR);
-    if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
-        USER_LOG_ERROR("Wait end flight status error.");
-        goto out;
-    }
+    // USER_LOG_INFO("The aircraft is in the air...");
+    // returnCode = DjiTest_WaypointV3WaitEndFlightStatus(DJI_FC_SUBSCRIPTION_FLIGHT_STATUS_IN_AIR);
+    // if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
+    //     USER_LOG_ERROR("Wait end flight status error.");
+    //     goto out;
+    // }
 
-    USER_LOG_INFO("The aircraft is on the ground and motors are rotating...");
-    returnCode = DjiTest_WaypointV3WaitEndFlightStatus(DJI_FC_SUBSCRIPTION_FLIGHT_STATUS_ON_GROUND);
-    if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
-        USER_LOG_ERROR("Wait end flight status error.");
-        goto out;
-    }
+    // USER_LOG_INFO("The aircraft is on the ground and motors are rotating...");
+    // returnCode = DjiTest_WaypointV3WaitEndFlightStatus(DJI_FC_SUBSCRIPTION_FLIGHT_STATUS_ON_GROUND);
+    // if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
+    //     USER_LOG_ERROR("Wait end flight status error.");
+    //     goto out;
+    // }
 
     returnCode = DjiFcSubscription_GetLatestValueOfTopic(DJI_FC_SUBSCRIPTION_TOPIC_STATUS_FLIGHT,
                                                         (uint8_t *) &flightStatus,
