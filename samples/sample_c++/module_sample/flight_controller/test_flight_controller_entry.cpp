@@ -60,8 +60,8 @@ start:
         << "| [5] Flight controller sample - arrest flying                                                     |\n"
         << "| [6] Flight controller sample - set get parameters                                                |\n"
         << "| [7] Waypoint 2.0 sample - run airline mission by settings (only support on M300 RTK)             |\n"
-//       << "| [8] Waypoint 3.0 sample - run airline mission by kmz file (not support on M300 RTK)              |\n"
-        << "| [8] Interest point sample - run interest point mission by settings (only support on M3E/M3T)     |\n"
+        << "| [8] Waypoint 3.0 sample - run airline mission by kmz file (not support on M300 RTK)              |\n"
+        << "| [9] Interest point sample - run interest point mission by settings (only support on M3E/M3T)     |\n"
         << std::endl;
 
     std::cin >> inputSelectSample;
@@ -90,10 +90,10 @@ start:
         case '7':
             DjiTest_WaypointV2RunSample();
             break;
-//        case '8':
-//            DjiTest_WaypointV3RunSample();
-//            break;
-        case '8':
+       case '8':
+           DjiTest_WaypointV3RunSample();
+           break;
+        case '9':
             DjiTest_InterestPointRunSample();
             break;
         case 'q':

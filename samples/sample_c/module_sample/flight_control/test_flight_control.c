@@ -92,6 +92,7 @@ static T_DjiReturnCode DjiTest_FlightControlInit(void);
 static T_DjiReturnCode DjiTest_FlightControlDeInit(void);
 static void DjiTest_FlightControlTakeOffLandingSample(void);
 static void DjiTest_FlightControlPositionControlSample(void);
+static void DjiTest_FlightControlPositionControlSampleB(void);
 static void DjiTest_FlightControlGoHomeForceLandingSample(void);
 static void DjiTest_FlightControlVelocityControlSample(void);
 static void DjiTest_FlightControlArrestFlyingSample(void);
@@ -322,34 +323,87 @@ void DjiTest_FlightControlPositionControlSample()
 
     USER_LOG_INFO("--> Step 3: Move to north:0(m), east:6(m), up:6(m) , yaw:30(degree) from current point");
     DjiTest_WidgetLogAppend("--> Step 3: Move to north:0(m), east:6(m), up:6(m) , yaw:30(degree) from current point");
-    if (!DjiTest_FlightControlMoveByPositionOffset((T_DjiTestFlightControlVector3f) {0, 6, 6}, 30, 0.8, 1)) {
+    if (!DjiTest_FlightControlMoveByPositionOffset((T_DjiTestFlightControlVector3f) {0, 0, 20}, 0, 0.8, 1)) {
         USER_LOG_ERROR("Move to north:0(m), east:6(m), up:6(m) , yaw:30(degree) from current point failed");
         goto out;
     };
 
+    // USER_LOG_INFO("--> Step 4: Move to north:6(m), east:0(m), up:-3(m) , yaw:-30(degree) from current point");
+    // DjiTest_WidgetLogAppend(
+    //     "--> Step 4: Move to north:6(m), east:0(m), up:-3(m) , yaw:-30(degree) from current point");
+    // if (!DjiTest_FlightControlMoveByPositionOffset((T_DjiTestFlightControlVector3f) {0, 0, 0}, -30, 0.8, 1)) {
+    //     USER_LOG_ERROR("Move to north:6(m), east:0(m), up:-3(m) , yaw:-30(degree) from current point failed");
+    //     goto out;
+    // };
+
+    // USER_LOG_INFO("--> Step 5: Move to north:-6(m), east:-6(m), up:0(m) , yaw:0(degree) from current point");
+    // DjiTest_WidgetLogAppend("--> Step 5: Move to north:-6(m), east:-6(m), up:0(m) , yaw:0(degree) from current point");
+    // if (!DjiTest_FlightControlMoveByPositionOffset((T_DjiTestFlightControlVector3f) {5, 5, -10}, 0, 0.8, 1)) {
+    //     USER_LOG_ERROR("Move to north:-6(m), east:-6(m), up:0(m) , yaw:0(degree) from current point failed");
+    //     goto out;
+    // }
+
+    // USER_LOG_INFO("--> Step 6: Landing\r\n");
+    // DjiTest_WidgetLogAppend("--> Step 6: Landing\r\n");
+    // if (!DjiTest_FlightControlMonitoredLanding()) {
+    //     USER_LOG_ERROR("Landing failed");
+    //     goto out;
+    // }
+    // USER_LOG_INFO("Successful landing\r\n");
+    // DjiTest_WidgetLogAppend("Successful landing\r\n");
+
+    USER_LOG_INFO("--> Step 7: Release joystick authority");
+    DjiTest_WidgetLogAppend("--> Step 7: Release joystick authority");
+    returnCode = DjiFlightController_ReleaseJoystickCtrlAuthority();
+    if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
+        USER_LOG_ERROR("Release joystick authority failed, error code: 0x%08X", returnCode);
+        goto out;
+    }
+
+out:
+    USER_LOG_INFO("Flight control move-by-position sample end");
+    DjiTest_WidgetLogAppend("Flight control move-by-position sample end");
+}
+
+void DjiTest_FlightControlPositionControlSampleB()
+{
+    T_DjiReturnCode returnCode;
+
+    USER_LOG_INFO("Flight control move-by-position sample start");
+    DjiTest_WidgetLogAppend("Flight control move-by-position sample start");
+
+    USER_LOG_INFO("--> Step 1: Obtain joystick control authority.");
+    DjiTest_WidgetLogAppend("--> Step 1: Obtain joystick control authority.");
+    returnCode = DjiFlightController_ObtainJoystickCtrlAuthority();
+    if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
+        USER_LOG_ERROR("Obtain joystick authority failed, error code: 0x%08X", returnCode);
+        goto out;
+    }
+    s_osalHandler->TaskSleepMs(1000);
+
+
+
     USER_LOG_INFO("--> Step 4: Move to north:6(m), east:0(m), up:-3(m) , yaw:-30(degree) from current point");
     DjiTest_WidgetLogAppend(
         "--> Step 4: Move to north:6(m), east:0(m), up:-3(m) , yaw:-30(degree) from current point");
-    if (!DjiTest_FlightControlMoveByPositionOffset((T_DjiTestFlightControlVector3f) {6, 0, -3}, -30, 0.8, 1)) {
+    if (!DjiTest_FlightControlMoveByPositionOffset((T_DjiTestFlightControlVector3f) {0, 7.5, 5}, 0, 0.8, 1)) {
         USER_LOG_ERROR("Move to north:6(m), east:0(m), up:-3(m) , yaw:-30(degree) from current point failed");
         goto out;
     };
 
     USER_LOG_INFO("--> Step 5: Move to north:-6(m), east:-6(m), up:0(m) , yaw:0(degree) from current point");
     DjiTest_WidgetLogAppend("--> Step 5: Move to north:-6(m), east:-6(m), up:0(m) , yaw:0(degree) from current point");
-    if (!DjiTest_FlightControlMoveByPositionOffset((T_DjiTestFlightControlVector3f) {-6, -6, 0}, 0, 0.8, 1)) {
+    if (!DjiTest_FlightControlMoveByPositionOffset((T_DjiTestFlightControlVector3f) {7.5, 0, -3}, 0, 0.8, 1)) {
         USER_LOG_ERROR("Move to north:-6(m), east:-6(m), up:0(m) , yaw:0(degree) from current point failed");
         goto out;
     }
 
-    USER_LOG_INFO("--> Step 6: Landing\r\n");
-    DjiTest_WidgetLogAppend("--> Step 6: Landing\r\n");
-    if (!DjiTest_FlightControlMonitoredLanding()) {
-        USER_LOG_ERROR("Landing failed");
+    USER_LOG_INFO("--> Step 5: Move to north:-6(m), east:-6(m), up:0(m) , yaw:0(degree) from current point");
+    DjiTest_WidgetLogAppend("--> Step 5: Move to north:-6(m), east:-6(m), up:0(m) , yaw:0(degree) from current point");
+    if (!DjiTest_FlightControlMoveByPositionOffset((T_DjiTestFlightControlVector3f) {-7.5, -7.5, -2}, 0, 0.8, 1)) {
+        USER_LOG_ERROR("Move to north:-6(m), east:-6(m), up:0(m) , yaw:0(degree) from current point failed");
         goto out;
     }
-    USER_LOG_INFO("Successful landing\r\n");
-    DjiTest_WidgetLogAppend("Successful landing\r\n");
 
     USER_LOG_INFO("--> Step 7: Release joystick authority");
     DjiTest_WidgetLogAppend("--> Step 7: Release joystick authority");
@@ -894,6 +948,10 @@ void DjiTest_FlightControlSample(E_DjiTestFlightCtrlSampleSelect flightCtrlSampl
             DjiTest_FlightControlPositionControlSample();
             break;
         }
+        case E_DJI_TEST_FLIGHT_CTRL_SAMPLE_SELECT_TAKE_OFF_POSITION_CTRL_LANDING_B: {
+            DjiTest_FlightControlPositionControlSampleB();
+            break;
+        }        
         case E_DJI_TEST_FLIGHT_CTRL_SAMPLE_SELECT_TAKE_OFF_GO_HOME_FORCE_LANDING: {
             DjiTest_FlightControlGoHomeForceLandingSample();
             break;

@@ -29,6 +29,7 @@
 #include "dji_logger.h"
 #include "dji_waypoint_v3.h"
 #include "waypoint_file_c/waypoint_v3_test_file_kmz.h"
+#include <flight_control/test_flight_control.h>
 #include "dji_fc_subscription.h"
 
 /* Private constants ---------------------------------------------------------*/
@@ -87,7 +88,7 @@ T_DjiReturnCode DjiTest_WaypointV3RunSample(void)
 
     /*! Attention: suggest use the exported kmz file by DJI pilot. If use this test file, you need set the longitude as
      * 113.94255, latitude as 22.57765 on DJI Assistant 2 simulator */
-    snprintf(tempPath, DJI_TEST_WAYPOINT_V3_KMZ_FILE_PATH_LEN_MAX, "%s/waypoint_file/waypoint_v3_test_file.kmz",
+    snprintf(tempPath, DJI_TEST_WAYPOINT_V3_KMZ_FILE_PATH_LEN_MAX, "%s/waypoint_file/ParkingLot.kmz",
              curFileDirPath);
 
     kmzFile = fopen(tempPath, "r");
@@ -130,12 +131,68 @@ T_DjiReturnCode DjiTest_WaypointV3RunSample(void)
     }
 #endif
 
-    // USER_LOG_INFO("Execute start action");
-    // returnCode = DjiWaypointV3_Action(DJI_WAYPOINT_V3_ACTION_START);
-    // if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
-    //     USER_LOG_ERROR("Execute start action failed.");
-    //     goto close_file;
-    // }
+    // DjiTest_FlightControlRunSample(E_DJI_TEST_FLIGHT_CTRL_SAMPLE_SELECT_TAKE_OFF_POSITION_CTRL_LANDING);
+
+
+    USER_LOG_INFO("Execute start action");
+    returnCode = DjiWaypointV3_Action(DJI_WAYPOINT_V3_ACTION_START);
+    if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
+        USER_LOG_ERROR("Execute start action failed.");
+        goto close_file;
+    }
+
+    osalHandler->TaskSleepMs(50000);
+
+    USER_LOG_INFO("Execute stop action");
+    returnCode = DjiWaypointV3_Action(DJI_WAYPOINT_V3_ACTION_STOP);
+    if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
+        USER_LOG_ERROR("Execute start action failed.");
+        goto close_file;
+    }    
+// 
+    DjiTest_FlightControlRunSample(E_DJI_TEST_FLIGHT_CTRL_SAMPLE_SELECT_TAKE_OFF_POSITION_CTRL_LANDING_B);
+// 
+    snprintf(tempPath, DJI_TEST_WAYPOINT_V3_KMZ_FILE_PATH_LEN_MAX, "%s/waypoint_file/ParkingLotResume.kmz",
+             curFileDirPath);
+// 
+    kmzFile = fopen(tempPath, "r");
+    if (kmzFile == NULL) {
+        USER_LOG_ERROR("Open kmz file failed.");
+        goto out;
+    }
+// 
+    returnCode = UtilFile_GetFileSize(kmzFile, &kmzFileSize);
+    if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
+        USER_LOG_ERROR("Get kmz file size failed.");
+        goto close_file;
+    }
+// 
+    kmzFileBuf = osalHandler->Malloc(kmzFileSize);
+    if (kmzFileBuf == NULL) {
+        USER_LOG_ERROR("Malloc kmz file buf error.");
+        goto close_file;
+    }
+// 
+    readLen = fread(kmzFileBuf, 1, kmzFileSize, kmzFile);
+    if (readLen != kmzFileSize) {
+        USER_LOG_ERROR("Read kmz file data failed.");
+        goto close_file;
+    }
+// 
+    returnCode = DjiWaypointV3_UploadKmzFile(kmzFileBuf, kmzFileSize);
+    if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
+        USER_LOG_ERROR("Upload kmz file failed.");
+        goto close_file;
+    }
+// 
+    osalHandler->Free(kmzFileBuf);
+// 
+    USER_LOG_INFO("Execute start action");
+    returnCode = DjiWaypointV3_Action(DJI_WAYPOINT_V3_ACTION_START);
+    if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
+        USER_LOG_ERROR("Execute start action failed.");
+        goto close_file;
+    }
 
 close_file:
 #ifdef SYSTEM_ARCH_LINUX
@@ -154,33 +211,33 @@ close_file:
         goto out;
     }
 
-    // USER_LOG_INFO("The aircraft is on the ground and motors are stoped...");
-    // returnCode = DjiTest_WaypointV3WaitEndFlightStatus(DJI_FC_SUBSCRIPTION_FLIGHT_STATUS_STOPED);
-    // if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
-    //     USER_LOG_ERROR("Wait end flight status error.");
-    //     goto out;
-    // }
+    USER_LOG_INFO("The aircraft is on the ground and motors are stoped...");
+    returnCode = DjiTest_WaypointV3WaitEndFlightStatus(DJI_FC_SUBSCRIPTION_FLIGHT_STATUS_STOPED);
+    if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
+        USER_LOG_ERROR("Wait end flight status error.");
+        goto out;
+    }
 
-    // USER_LOG_INFO("The aircraft is on the ground and motors are rotating...");
-    // returnCode = DjiTest_WaypointV3WaitEndFlightStatus(DJI_FC_SUBSCRIPTION_FLIGHT_STATUS_ON_GROUND);
-    // if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
-    //     USER_LOG_ERROR("Wait end flight status error.");
-    //     goto out;
-    // }
+    USER_LOG_INFO("The aircraft is on the ground and motors are rotating...");
+    returnCode = DjiTest_WaypointV3WaitEndFlightStatus(DJI_FC_SUBSCRIPTION_FLIGHT_STATUS_ON_GROUND);
+    if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
+        USER_LOG_ERROR("Wait end flight status error.");
+        goto out;
+    }
 
-    // USER_LOG_INFO("The aircraft is in the air...");
-    // returnCode = DjiTest_WaypointV3WaitEndFlightStatus(DJI_FC_SUBSCRIPTION_FLIGHT_STATUS_IN_AIR);
-    // if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
-    //     USER_LOG_ERROR("Wait end flight status error.");
-    //     goto out;
-    // }
+    USER_LOG_INFO("The aircraft is in the air...");
+    returnCode = DjiTest_WaypointV3WaitEndFlightStatus(DJI_FC_SUBSCRIPTION_FLIGHT_STATUS_IN_AIR);
+    if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
+        USER_LOG_ERROR("Wait end flight status error.");
+        goto out;
+    }
 
-    // USER_LOG_INFO("The aircraft is on the ground and motors are rotating...");
-    // returnCode = DjiTest_WaypointV3WaitEndFlightStatus(DJI_FC_SUBSCRIPTION_FLIGHT_STATUS_ON_GROUND);
-    // if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
-    //     USER_LOG_ERROR("Wait end flight status error.");
-    //     goto out;
-    // }
+    USER_LOG_INFO("The aircraft is on the ground and motors are rotating...");
+    returnCode = DjiTest_WaypointV3WaitEndFlightStatus(DJI_FC_SUBSCRIPTION_FLIGHT_STATUS_ON_GROUND);
+    if (returnCode != DJI_ERROR_SYSTEM_MODULE_CODE_SUCCESS) {
+        USER_LOG_ERROR("Wait end flight status error.");
+        goto out;
+    }
 
     returnCode = DjiFcSubscription_GetLatestValueOfTopic(DJI_FC_SUBSCRIPTION_TOPIC_STATUS_FLIGHT,
                                                         (uint8_t *) &flightStatus,
